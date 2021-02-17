@@ -39,14 +39,28 @@ function Airplane(name) {
           + It should return a string with `name` and `age`. Example: "Mary, 50"
   */
   
- function Person() {
-    
+ function Person(name, age) {
+    this.name = name;
+    this.age = age;
+    this.stomach = [];
   }
- 
- 
 
-  
-  
+  Person.prototype.eat = function (someFood) {
+    if (this.stomach.length <= 9){
+      this.stomach.push(someFood);
+    }
+  }
+
+  Person.prototype.poop = function (){
+    this.stomach.splice(0, this.stomach.length);
+  }
+
+  Person.prototype.toString = function () {
+    return `${this.name}, ${this.age}`;
+  }
+
+  let person1 = new Person('Jade', 28);
+
   
   
   /*
@@ -63,10 +77,43 @@ function Airplane(name) {
           + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
   */
   
- function Car() {
-    
+ function Car(model, milesPerGallon) {
+    this.model = model;
+    this.milesPerGallon = milesPerGallon;
+    this.tank = 0;
+    this.odometer = 0;
+  }
+
+  Car.prototype.fill = function(gallons) {
+    this.tank = this.tank + gallons;
   }
   
+  const ford = new Car('Mustang', 9);
+  
+  //Stretch Tasks
+  Car.prototype.drive = function(distance) {
+    this.odometer = distance;
+    let miles = this.tank * this.milesPerGallon;
+    if (miles > distance){
+      this.tank = Number(((miles - distance) / this.milesPerGallon).toFixed(2));
+    } else {
+      this.tank = 0;
+      console.log(`I ran out of fuel with ${distance - miles} miles to go!`);
+      return `I ran out of fuel at ${this.odometer} miles!`;
+    }
+  }
+
+  Car.prototype.stop = function() {
+    this.odometer = 0;
+  }
+
+  console.log(ford)
+  ford.fill(10);
+  console.log(ford);
+  ford.drive(101);
+  console.log(ford);
+  ford.stop();
+  console.log(ford);
   
   /*
     TASK 3
@@ -75,18 +122,32 @@ function Airplane(name) {
       - Besides the methods on Person.prototype, babies have the ability to `.play()`:
           + Should return a string "Playing with x", x being the favorite toy.
   */
- function Baby() {
-   
+ function Baby(name, age, favoriteToy) {
+   Person.call(this, name, age)
+  this.favoriteToy = favoriteToy;
   }
+
+  Baby.prototype = Object.create(Person.prototype);
+  Baby.prototype.play = function(){
+    return `Playing with ${this.favoriteToy}`;
+  }
+
+  let archie = new Baby ('Archie', 1, 'a baseball');
+  console.log(archie)
+  console.log(archie.play())
+  archie.eat('Spicy Garlic Wings')
+  console.log(archie.stomach);
+  archie.poop();
+  console.log(archie.stomach);
  
   
   /* 
     TASK 4
     In your own words explain the four principles for the "this" keyword below:
-    1. 
-    2. 
-    3. 
-    4. 
+    1. Window - when "this" is on the global scope
+    2. Implicit - when 'this' is implied on a preceding dot.
+    3. Explicit - when using call() or apply(), 'this' is explicit
+    4. New - 'this' refers to the new object being created.
   */
   
   
